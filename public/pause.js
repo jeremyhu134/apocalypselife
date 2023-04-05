@@ -68,11 +68,7 @@ class UnlockScene extends Phaser.Scene {
         //no preloads for this subclass
     }
     create() {
-        this.scene.bringToTop();
-        if(gameState.kills >= 500 && gameState.weaponSkins.SkeletonGun.owned == 0){
-            gameState.weaponSkins.SkeletonGun.owned = 1;
-            gameState.createUnlocked(this,'characterSkeletonGun');
-        }
+        
 	}
     update(){
         //game loop that constantly runs (not needed for unlocking items)
@@ -125,11 +121,85 @@ class IconScene extends Phaser.Scene {
     }
     create() {
         if(gameState.playerLoaded == true){
+            var self = this;
+            var inventoryOpen = false;
             this.scene.bringToTop();
             this.add.image(10,10,'healthImage').setScale(1.5).setOrigin(0,0);
             gameState.createHealthBar2(this,gameState.character,gameState.characterStats.health,55,15);
             this.add.image(500,15,'sprintImage').setScale(1.5).setOrigin(0,0);
             gameState.createSprintBar(this,gameState.character, gameState.characterStats.sprint,550,15);
+            var inventoryIcon = this.add.image(1115,15,'inventoryIcon').setScale(1).setOrigin(0,0).setInteractive();
+            inventoryIcon.on('pointerdown', function(pointer){
+                if(inventoryOpen == false){
+                    self.scene.launch('InventoryScene');
+                    gameState.InventoryScene.scene.bringToTop();
+                    inventoryOpen = true;
+                }else{
+                    self.scene.stop('InventoryScene');
+                    inventoryOpen = false;
+                }
+            });
+            
+            function createSlot(scene,k){
+                var slot = scene.add.image(800+100*k,10,'frame2').setOrigin(0,0).setInteractive();
+                slot.on('pointerdown', function(pointer){
+                    gameState.character.selectedSlot = k;
+                });
+                var slotItem = scene.add.image(800+100*k+40,10+40,'BLANK').setOrigin(0.5,0.5);
+                scene.time.addEvent({
+                    delay: 100,
+                    callback: ()=>{
+                        if(gameState.character.selectedSlot == k){
+                            gameState.character.selected = gameState.itemSlot[k];
+                            gameState.character.stats.selected = gameState.itemSlot[k];
+                            if(gameState.itemSlot[k]== null || gameState.itemSlot[k]== `slot${k+1}`){
+                                gameState.character.item.setTexture('BLANK');
+                            }else{
+                                gameState.character.item.setTexture(`${gameState.itemSlot[k].sprite}`);
+                                gameState.character.item.setFrame(1);
+                            }
+                            slot.setTint(0xF0FF06,0xFFFFF6,0xFFFFF6,0xF0FF06);
+                        }else{
+                            slot.clearTint();
+                        }
+                        if(gameState.itemSlot[k]== null || gameState.itemSlot[k]== `slot${k+1}`){
+                            gameState.itemSlot[k] = `slot${k+1}`;
+                            slotItem.setTexture('BLANK');
+                        }else{
+                            slotItem.setTexture(`${gameState.itemSlot[k].sprite}`);
+                        }
+                    },  
+                    startAt: 0,
+                    timeScale: 1,
+                    repeat: -1,
+                });
+            }
+            for (var i = 0; i < gameState.itemSlot.length; i++){
+                if(gameState.itemSlot[i] !== null){
+                    
+                }
+                createSlot(self,i);
+            }
+        }
+	}
+    update(){
+        //game loop that constantly runs (not needed for death screen)
+    }
+}
+
+class InventoryScene extends Phaser.Scene {
+    constructor() {
+        //parameter for phaser class to allow phaser to reference subclass
+		super({ key: 'InventoryScene' })
+	}
+    preload(){
+        //no preloads for this subclass
+    }
+    create() {
+        gameState.InventoryScene = this;
+        this.scene.bringToTop();
+        if(gameState.playerLoaded == true){
+            gameState.loadInventory(this);
         }
 	}
     update(){

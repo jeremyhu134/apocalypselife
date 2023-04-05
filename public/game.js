@@ -13,11 +13,11 @@ const config = {
         arcade: {
             gravity: { y: 0 },
             enableBody: true,
-            debug: true
+           // debug: true
         }
     },
     //subclass scenes 
-    scene:[MenuScene,PauseScene,ArenaScene,UpgradeScene,DeathScene,ShopScene,UnlockScene,LoadoutScene,LootboxesScene,IconScene],
+    scene:[MenuScene,PauseScene,ArenaScene,UpgradeScene,DeathScene,ShopScene,UnlockScene,LoadoutScene,LootboxesScene,IconScene,InventoryScene],
     //phasers scale system to fit into the brower
     scale: {
         zoom: 10,
@@ -194,33 +194,38 @@ let gameState = {
         }
     ],
     
-    inventory:[],
-    //calculates upgrade cost for upgrades
-    upgradeCosts: function(current, max, factor){
-        var cost;
-        cost = (((current-max)+factor)/factor)*100;
-        return cost;
+    itemSlot:[null,null,null],
+    inventory:[[null,null,null,null],[null,null,null,null],[null,null,null,null]],
+    loadInventory: function(scene){
+        var k = 0;
+        for (var i = 0; i < gameState.inventory.length; i++){
+            for (var j = 0; j < gameState.inventory[i].length; j++){
+                if(gameState.inventory[i][k] !== null){
+                    
+                }
+                scene.add.image(800+100*j,100+i*100,'frame2').setOrigin(0,0);
+                k++;
+            }
+        }
+        
     },
     
-    //resets stats after death or when exiting to menu
-    updateStats: function(){
-        //resets players stats
-        gameState.coinsAdd = 3;
-        gameState.speed = gameState.characterStats.speed;
-        gameState.health = gameState.characterStats.health;
-        gameState.ammo = gameState.characterStats.ammo;
-        gameState.fireRate = gameState.characterStats.fireRate;
-        gameState.damage = gameState.characterStats.damage;
-        gameState.kills = 0;
-        gameState.characterStats.fireReady = true;
-        gameState.disableReload = false;
-        gameState.once = false;
-        
-        //reset zombie stats
-        gameState.zombie.speed =  75;
-        gameState.zombie.health =  100;
-        gameState.bossSummonKills = 0;
-    },
+    
+    
+    weapons:[
+        {
+            sprite:'glock',
+            damage: 10,
+            firerate: 10,
+            action: function(scene,player){
+                player.item.anims.play('glockAction',true);
+                var bullet = gameState.bullets.create(player.x,player.y,'smallBullet');
+                bullet.setRotation(Phaser.Math.Angle.Between(player.x,player.y,player.trueX,player.trueY));
+                scene.physics.moveTo(bullet,player.trueX,player.trueY,600);
+            }
+        }
+    ],
+    
     
     thingsToSave: {
         numLootboxes: 5,
@@ -243,63 +248,21 @@ let gameState = {
         }
     },
     
-    createSlot: function(scene,hat,num){
-        scene.add.image(hat.x,hat.y,`frame2`).setDepth(-1);
-        if(gameState.inventory[num].animate == true){
-            hat.anims.play(`${gameState.inventory[num].name}Animate`,true);
-        }
-        hat.on('pointerup', () => {
-            gameState.equipButton.x = gameState.input.x;
-            gameState.equipButton.y = gameState.input.y;
-            gameState.deleteButton.x = gameState.input.x;
-            gameState.deleteButton.y = gameState.input.y+19;
-        });
-        hat.on('pointerover', () => {
-            gameState.display.x = 170;
-            gameState.display.y = 215;
-            gameState.display.setTexture(`${gameState.inventory[num].name}`);
-            gameState.pick = gameState.inventory[num];
-            if(gameState.inventory[num].animate == true){
-                gameState.display.anims.play(`${gameState.inventory[num].name}Animate`);
-            }else {
-                gameState.display.anims.pause();
-            }
-            gameState.itemStats.setText(gameState.inventory[num].displayName);
-        });
-        hat.on('pointerout', () => {
-            gameState.display.x = -999;
-            gameState.display.y = -999;
-            gameState.itemStats.setText("");
-        });
-        hat.setScale(60/hat.width)
-    },
-    
-    loadCosmetics: function(scene,x,y){
-        var count = 1;
-        var row = 1;
-        for (var j = 1; j <= gameState.inventory.length; j++){
-            count++;
-            if(j == 1){
-                count = 1;
-            }
-            if(count% 9 == 0){
-                row++;
-                count = 1;
-            }
-            var hat = scene.add.sprite(x+100*count,y+100*row,`${gameState.inventory[j-1].name}`).setScale(60/60).setInteractive();
-            gameState.createSlot(scene,hat,j-1);
-        }
-    },
-    //variable to make sure the death commands happen only once
-    once: false,
     //controls that constantly are looped in the Arena Screen
     characterControls : function(scene){
         if(gameState.character.health > 0){
-            gameState.character.depth = 0;
+            gameState.character.trueX = scene.input.x+gameState.character.x-600;
+            gameState.character.trueY = scene.input.y+gameState.character.y-338;
+            gameState.character.item.x = gameState.character.x;
+            gameState.character.item.y = gameState.character.y;
+            
             gameState.character.body.checkWorldBounds();
-            var angle = Phaser.Math.Angle.Between(gameState.character.x,gameState.character.y,scene.input.x+gameState.character.x-600,scene.input.y+gameState.character.y-338);
-            gameState.socket.emit('move', gameState.character.id,gameState.character.x,gameState.character.y, angle);
-            gameState.character.setRotation(Phaser.Math.Angle.Between(gameState.character.x,gameState.character.y,scene.input.x+gameState.character.x-600,scene.input.y+gameState.character.y-338)); 
+            var angle = Phaser.Math.Angle.Between(gameState.character.x,gameState.character.y,gameState.character.trueX,gameState.character.trueY);
+            gameState.character.stats.angle = angle;
+            gameState.character.stats.x = gameState.character.x;
+            gameState.character.stats.y = gameState.character.y;
+            gameState.character.setRotation(Phaser.Math.Angle.Between(gameState.character.x,gameState.character.y,gameState.character.trueX,gameState.character.trueY)); 
+            gameState.character.item.setRotation(angle);
             if(gameState.keys.D.isDown && gameState.keys.S.isDown){
                 gameState.character.setVelocityX(gameState.character.speed*Math.sin(Phaser.Math.Angle.Between(0,0,1,1)));
                 gameState.character.setVelocityY(gameState.character.speed*Math.sin(Phaser.Math.Angle.Between(0,0,1,1)));
@@ -349,6 +312,28 @@ let gameState = {
                 }
                 if(gameState.character.speed > gameState.characterStats.speed){
                     gameState.character.speed /= 2;
+                }
+            }
+            gameState.character.stats.trueX = gameState.character.trueX;
+            gameState.character.stats.trueY = gameState.character.trueY;
+            if(gameState.keys.ONE.isDown){
+                gameState.character.selectedSlot = 0;
+                gameState.socket.emit('itemChanged', gameState.character.id,gameState.character.selected,angle);
+            }else if(gameState.keys.TWO.isDown){
+                gameState.character.selectedSlot = 1;
+                gameState.socket.emit('itemChanged', gameState.character.id,gameState.character.selected,angle);
+            }else if(gameState.keys.THREE.isDown){
+                gameState.character.selectedSlot = 2;
+                gameState.socket.emit('itemChanged', gameState.character.id,gameState.character.selected,angle);
+            }
+            gameState.character.firerate -= 1;
+            if(gameState.mouse.isDown){
+                if(gameState.character.selected !== null && gameState.character.selected !== "slot1" && gameState.character.selected !== "slot2" && gameState.character.selected !== "slot3"){
+                    if(gameState.character.firerate <= 0){
+                        gameState.character.selected.action(scene,gameState.character);
+                        gameState.socket.emit('itemUsed', gameState.character.stats);
+                        gameState.character.firerate = gameState.character.selected.firerate;
+                    }
                 }
             }
         }

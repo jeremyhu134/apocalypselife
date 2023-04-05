@@ -7,147 +7,30 @@ class MenuScene extends Phaser.Scene {
     //functions preloads sprites, images, and audio
     preload(){
         this.load.spritesheet('loading','images/loadingSprite.png',{frameWidth: 30,frameHeight:3});
-        this.load.image('two','images/two.png');
+        
         //people
         this.load.spritesheet('character','images/character.png',{frameWidth: 120,frameHeight:120});
-        this.load.spritesheet('characterDeath','images/characterDeath.png',{frameWidth: 50,frameHeight:50});
         
         
-        this.load.spritesheet('merchant','images/merchantSprite.png',{frameWidth: 100,frameHeight:90});
+       
         //zombies
-        this.load.spritesheet('zombie','images/zombie.png',{frameWidth: 122,frameHeight:124});
-        this.load.spritesheet('sarmsZombie','images/sarmsZombie.png',{frameWidth: 70,frameHeight:70});
         
-        this.load.spritesheet('quadZombie','images/quadZombie.png',{frameWidth: 44,frameHeight:80});
-        this.load.spritesheet('quadZombieAbility','images/quadZombieAbility.png',{frameWidth: 200,frameHeight:200});
-        this.load.spritesheet('zombieClone','images/zombieClone.png',{frameWidth: 50,frameHeight:50});
-        
-        //Items
-        this.load.spritesheet('gunFlash','images/gunFlash.png',{frameWidth: 20,frameHeight:20});
-        this.load.spritesheet('explosion','images/explosion.png',{frameWidth: 75,frameHeight:75});
-        this.load.spritesheet('bulletBlood','images/bulletBlood.png',{frameWidth: 20,frameHeight:20});
-        //bullets
-        this.load.image('minigunbullet','images/bullet1.png');
-        this.load.image('assaultRiflebullet','images/bullet1.png');
-        this.load.image('uzibullet','images/bullet2.png');
-        this.load.image('shotgunbullet','images/bullet2.png');
-        this.load.image('rocketLauncherbullet','images/rocket1.png');
-        this.load.image('sniperRiflebullet','images/bullet1.png');
-        this.load.image('assaultRifleFuturebullet','images/assaultRifleFuturebullet.png');
-        this.load.image('bulletTrail','images/bulletTrail.png');
-        this.load.image('bulletLaser','images/bulletLaser.png');
-        this.load.image('bulletTennis','images/bulletTennis.png');
-        this.load.image('bulletSG','images/bulletSG.png');
-        this.load.image('bulletGolden','images/bulletGolden.png');
-        this.load.image('sprintImage','images/sprintImage.png');
+        this.load.image('inventoryIcon','images/inventoryIcon.png');
         
         //objects
-        this.load.spritesheet('coin','images/coin.png',{frameWidth: 30,frameHeight:32});
-        this.load.image('grenadeObj','images/grenadeObj.png');
-        this.load.image('gunMagazine','images/gunMagazine.png');
-        //weapons
-        this.load.spritesheet('assaultRifle','images/assaultRifle.png',{frameWidth: 150,frameHeight:80});
-        this.load.spritesheet('assaultRifleFuture','images/assaultRifleFuture.png',{frameWidth: 150,frameHeight:80});
-        this.load.spritesheet('minigun','images/minigun.png',{frameWidth: 190,frameHeight:75});
-        this.load.spritesheet('rocketLauncher','images/rocketLauncher.png',{frameWidth: 190,frameHeight:75});
-        this.load.spritesheet('sniperRifle','images/sniperRifle.png',{frameWidth: 150,frameHeight:80});
-        this.load.spritesheet('uzi','images/uzi.png',{frameWidth: 150,frameHeight:80});
-        this.load.spritesheet('shotgun','images/shotgun.png',{frameWidth: 150,frameHeight:80});
-        this.load.spritesheet('goldenAssaultRifle','images/goldenAssaultRifle.png',{frameWidth: 100,frameHeight:50});
-        
-        
-        //cosmetics
-        this.load.image('susHat','images/susHat.png');
-        this.load.image('satvikHat','images/satvikHat.png');
-        this.load.image('chadvikHat','images/chadvikHat.png');
-        this.load.image('diegoHat','images/diegoHat.png');
-        this.load.image('diego2Hat','images/diego2Hat.png');
-        this.load.image('helmetHat','images/helmetHat.png');
-        this.load.image('partyHat','images/partyHat.png');
-        this.load.image('footballHat','images/footballHat.png');
-        this.load.image('baseballHat','images/baseballHat.png');
-        this.load.image('roboHelmetHat','images/roboHelmetHat.png');
-        this.load.image('vikingHelmetHat','images/vikingHelmetHat.png');
-        this.load.image('finnHat','images/finnHat.png');
-        this.load.spritesheet('burningHelmetHat','images/burningHelmetHat.png',{frameWidth: 55,frameHeight:120});
-        this.load.spritesheet('ghastlySkullHat','images/ghastlySkullHat.png',{frameWidth: 65,frameHeight:65});
-        this.load.spritesheet('roidRagePhilHat','images/roidRagePhilHat.png',{frameWidth: 60,frameHeight:60});
         
         this.load.spritesheet('background','images/background.png',{frameWidth: 1397,frameHeight:675});
-        this.load.image('backgroundCity','images/backgroundCity.png');
-        this.load.image('backgroundTrampoline','images/backgroundTrampoline.png');
-        this.load.spritesheet('infiniteBulletsImage','images/infiniteBulletsImage.png',{frameWidth: 35,frameHeight:40});
-        this.load.spritesheet('grenadeImage','images/grenadeImage.png',{frameWidth: 35,frameHeight:35});
-        this.load.spritesheet('medicImage','images/medicImage.png',{frameWidth: 35,frameHeight:35});
-        this.load.image('healthBar','images/healthBar.png');
-        this.load.image('zombieHealthBar','images/zombieHealthBar.png');
-        this.load.image('healthBarBg','images/healthBarBg.png');
+        
         this.load.image('healthImage','images/healthImage.png');
-        this.load.image('ammoIcon','images/ammoIcon.png'); 
         this.load.image('sprintIcon','images/sprintIcon.png'); 
-        this.load.image('skull','images/skull.png');  
-        this.load.image('redSkull','images/redSkull.png');
-        this.load.spritesheet('timerSprite','images/timerSprite.png',{frameWidth: 50,frameHeight:50});
-        this.load.spritesheet('startButton','images/startButton.png',{frameWidth: 250,frameHeight:70});
-        this.load.spritesheet('toursButton','images/toursButton.png',{frameWidth: 250,frameHeight:70});
-        this.load.spritesheet('titleImage','images/titleImage.png',{frameWidth: 1200,frameHeight:200});
-        this.load.spritesheet('upgradeButton','images/upgradeButton.png',{frameWidth: 70,frameHeight:65});
-        this.load.spritesheet('equipButton','images/equipButton.png',{frameWidth: 100,frameHeight:40});
-        //cosmet
-        this.load.spritesheet('homeIcon','images/homeIcon.png',{frameWidth: 100,frameHeight:80});
-        this.load.spritesheet('upgradesButton','images/upgradesButton.png',{frameWidth: 210,frameHeight:60});
-        this.load.spritesheet('cosmeticsButton','images/cosmeticsButton.png',{frameWidth: 220,frameHeight:44});
-        this.load.spritesheet('lootboxesButton','images/lootboxesButton.png',{frameWidth: 150,frameHeight:45});
-        this.load.spritesheet('loadoutButton','images/loadoutButton.png',{frameWidth: 120,frameHeight:45});
-        this.load.spritesheet('deleteIcon','images/deleteIcon.png',{frameWidth: 60,frameHeight:60});
-        this.load.spritesheet('menuB1','images/menuB1.png',{frameWidth: 80,frameHeight:20});
-        this.load.spritesheet('menuB2','images/menuB2.png',{frameWidth: 80,frameHeight:20});
-        this.load.image('backButton','images/backButton.png');
-        this.load.image('backButton2','images/backButton2.png');
-        this.load.spritesheet('settingsButton','images/settingsButton.png',{frameWidth: 70,frameHeight:65});
-        this.load.spritesheet('assaultRifleIcon','images/assaultRifleIcon.png',{frameWidth: 100,frameHeight:100});
-        this.load.spritesheet('minigunIcon','images/minigunIcon.png',{frameWidth: 100,frameHeight:100});
-        this.load.spritesheet('rocketLauncherIcon','images/rocketLauncherIcon.png',{frameWidth: 100,frameHeight:100});
-        this.load.spritesheet('uziIcon','images/uziIcon.png',{frameWidth: 100,frameHeight:100});
-        this.load.spritesheet('sniperRifleIcon','images/sniperRifleIcon.png',{frameWidth: 100,frameHeight:100});
-        this.load.spritesheet('shotgunIcon','images/shotgunIcon.png',{frameWidth: 100,frameHeight:100});
         
-        //pause menu
-        this.load.image('pauseMainMenuButton','images/pauseMainMenuButton.png');
-        this.load.image('pauseMenu','images/pauseMenu.png');
-        this.load.image('unlockedMenu','images/unlockedMenu.png');
-        //upgrade sprites
-        this.load.spritesheet('upgradeOptions','images/upgradeOptions.png',{frameWidth: 400,frameHeight:200});
-        //death menu
-        this.load.image('deathMenu','images/deathMenu.png');
-        
-        //Shop icons
-        this.load.image('equippedImage','images/equippedImage.png');
-        this.load.spritesheet('lootBox','images/lootBox.png',{frameWidth: 400,frameHeight:400});
-        this.load.spritesheet('openButton','images/openButton.png',{frameWidth: 282,frameHeight:120});
-        
+        this.load.image('smallBullet','images/smallBullet.png');
         this.load.image('frame','images/frame.png');
         this.load.image('frame2','images/frame2.png');
         
-        //audio
-        this.load.audio('menuBgMusic', 'audio/menuBgMusic.mp3');
-        this.load.audio('bossMusic', 'audio/bossMusic.mp3');
-        this.load.audio('arenaMusic', 'audio/arenaMusic.mp3');
-        this.load.audio('tourMusic', 'audio/tourMusic.mp3');
-        this.load.audio('death', 'audio/death.mp3');
-        //sound affects
-        this.load.audio('characterHurt', 'audio/characterHurt.mp3');
-        this.load.audio('earthquake', 'audio/earthquake.mp3');
-        this.load.audio('shoot', 'audio/gunShootSound.mp3');
-        this.load.audio('explode', 'audio/explode.mp3');
-        this.load.audio('healed', 'audio/healed.mp3');
-        this.load.audio('powerUp', 'audio/powerUp.mp3');
-        this.load.audio('purchased', 'audio/purchased.mp3');
-        this.load.audio('zombieDeath', 'audio/zombieDeath.mp3');
-        this.load.audio('coinSound', 'audio/coinSound.mp3');
-        this.load.audio('hitSound', 'audio/hitsound.mp3');
-        this.load.audio('killSound', 'audio/killSound.mp3');
-        this.load.audio('click', 'audio/click.mp3');
+        this.load.image('BLANK','images/BLANK.png');
+        this.load.image('sprintImage','images/sprintImage.png');
+        this.load.spritesheet('glock','images/glock.png',{frameWidth: 80,frameHeight:40});
         
         var progressBar = this.add.graphics();
         progressBar.x = window.innerWidth/2;
@@ -208,6 +91,11 @@ class MenuScene extends Phaser.Scene {
             frames:this.anims.generateFrameNames('loading',{start: 0,end: 16})
         });
         */
+        this.anims.create({
+            key: 'glockAction',
+            frameRate: 14,
+            frames:this.anims.generateFrameNames('glock',{start: 2,end: 3})
+        });
         //sets global scene to variable for inside local functions
         gameState.globalScene = this;
         //create and animate background
